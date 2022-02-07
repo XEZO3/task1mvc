@@ -4,8 +4,13 @@ namespace MVC\controller;
 use MVC\core\controller;
 use MVC\model\users;
 use MVC\core\cookies;
+use MVC\core\session;
+
 class usercontroller extends controller{
-    
+    function __construct()
+    {
+        $session = new session;
+    }
     public function token(){
         //Generate a random string.
          $token = openssl_random_pseudo_bytes(32);
@@ -17,7 +22,7 @@ class usercontroller extends controller{
              return $token;
     }
     function login(){
-        $this->view("home/login",['title'=>"zeazo"]);
+        $this->view("home/pages/login",['title'=>"zeazo"]);
     }
      function  postlogin(){
         $token = $this->token();
@@ -32,9 +37,19 @@ class usercontroller extends controller{
         print_r($query);
         if(!empty($query)){
             $user->update_token($token,$username,$password);
-            cookies::set("token",$token);
-           //header("location:/task1mvc/public/home");
-           //exit;
+            session::set("token",$token);
+            session::set("id",$query->id);
+            session::set("per",$query->permession);
+            session::set("username",$username);
+            if($query->permession=100){
+                header("location:/task1mvc/public/admin");
+                exit;
+            }else{
+           header("location:/task1mvc/public/home");
+           exit;
+            }
+        }else{
+            echo"user name or password wrong";
         }
         // }else{
         //     header("location:/task1mvc/public/auth/login");

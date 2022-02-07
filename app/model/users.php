@@ -1,14 +1,12 @@
 <?php
 namespace MVC\model;
 use MVC\core\model;
-use MVC\core\cookies;
+use MVC\core\session;
 class users extends model{
-  public $username;
-  public $per;
+  
   function __construct()
   {
-    @$this->username = $this->setter("username");
-    @$this->per = $this->setter("permession");
+  
   }
     function getusers(){
       return  model::db()->rows("select * from users");
@@ -20,11 +18,15 @@ class users extends model{
     function update_token($token,$username,$password){
       return model::db()->update('users', ['token' => $token],['username'=>$username,'password'=>$password]);
     }
-    function setter($return){
-      $rows= model::db()->rows("SELECT * FROM users WHERE `token` = ? ", [cookies::get("token")]);
-       foreach($rows as $row){
-         return $row->$return;
-       }
+    // function setter($return){
+    //   $rows= model::db()->rows("SELECT * FROM users WHERE `token` = ? ", [cookies::get("token")]);
+    //    foreach($rows as $row){
+    //      return $row->$return;
+    //    }
+    // }
+    static function  getuserid($id){
+      $row= model::db()->row("SELECT * FROM users WHERE id=?",[$id]);
+      return $row->username;
     }
     
 }

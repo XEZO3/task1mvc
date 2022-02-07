@@ -9,12 +9,11 @@ class homecontroller extends controller{
 function index(){
     $users = new users();
     $db = $users->getusers();
-    $name = $users->username;
-    $per = $users->per;
+   
     // echo "<pre>";
     // var_dump($db);die;
 
-    $this->view("home/homepage",['title'=>"zeazo","name"=>$name,'per'=>$per]);
+    $this->view("home/pages/homepage",['title'=>"zeazo"]);
 }
 
 
